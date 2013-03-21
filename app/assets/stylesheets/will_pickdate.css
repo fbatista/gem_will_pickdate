@@ -1,5 +1,6 @@
 .wpd {
     position: absolute;
+    z-index: 9999;
     width: 208px;
     padding: 5px;
     height: 221px;
@@ -139,6 +140,8 @@
 	top: 50px;
 	text-align: center;
 	padding: 2px;
+	line-height: 32px;
+	height: auto;
 }
 
 .wpd .time .hour,
