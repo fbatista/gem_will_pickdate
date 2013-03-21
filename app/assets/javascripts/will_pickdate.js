@@ -1,3 +1,4 @@
+//= require jquery
 //= require jquery.mousewheel
 
 (function($) {
