@@ -4,6 +4,7 @@
     width: 208px;
     padding: 5px;
     height: 221px;
+    z-index: 9999;
     background: #efefef;
     -webkit-box-shadow: 0 0 10px #999;
     -moz-box-shadow: 0 0 10px #999;
