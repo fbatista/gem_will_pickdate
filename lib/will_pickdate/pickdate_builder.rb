@@ -1,10 +1,10 @@
-module PickdateHelper
+class ActionView::Base
   def datetime_field(object_name, method, options = {})
     InstanceTag.new(object_name, method, self, options.delete(:object)).to_datetime_field_tag(options)
   end
 end
 
-module PickdateHelperInstanceTag
+class ActionView::Helpers::InstanceTag
   def to_datetime_field_tag(options = {})
     options = options.stringify_keys
     options = DEFAULT_FIELD_OPTIONS.merge(options)
@@ -15,10 +15,6 @@ module PickdateHelperInstanceTag
     add_default_name_and_id(options)
     tag("input", options)
   end
-end
-
-class ActionView::Helpers::InstanceTag
-  include PickdateHelperInstanceTag
 end
 
 class ActionView::Helpers::FormBuilder
