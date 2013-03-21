@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "actionpack"
   s.add_development_dependency 'jquery-rails'
 
-  s.files         = Dir["{lib,test}/**/*", "[A-Z]*", "init.rb"] - ["Gemfile.lock"]
-  s.test_files    = Dir["test/**/*"]
-  s.require_paths = ["lib"]
+  s.files        = `git ls-files`.split("\n")
+  s.require_path = "lib"
 end
