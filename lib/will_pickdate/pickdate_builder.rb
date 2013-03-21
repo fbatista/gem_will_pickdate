@@ -10,7 +10,10 @@ class ActionView::Helpers::InstanceTag
     options = DEFAULT_FIELD_OPTIONS.merge(options)
 
     options["type"] = "datetime"
-    options["value"] = options.fetch("value"){ value_before_type_cast(object).iso8601 }
+    options["value"] = options.fetch("value"){ 
+      v = value_before_type_cast(object)
+      v.is_a? Time ? v.iso8601 : nil
+    }
     options["value"] &&= ERB::Util.html_escape(options["value"])
     add_default_name_and_id(options)
     tag("input", options)
