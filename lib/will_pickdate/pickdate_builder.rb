@@ -12,7 +12,7 @@ class ActionView::Helpers::InstanceTag
     options["type"] = "datetime"
     options["value"] = options.fetch("value"){ 
       v = value_before_type_cast(object)
-      v.is_a? Time ? v.iso8601 : nil
+      v.is_a?(Time) ? v.iso8601 : nil
     }
     options["value"] &&= ERB::Util.html_escape(options["value"])
     add_default_name_and_id(options)
