@@ -1,3 +1,9 @@
+module WillPickdate
+  class Engine < Rails::Engine
+    #auto wire
+  end
+end
+
 class ActionView::Base
   def datetime_field(object_name, method, options = {})
     InstanceTag.new(object_name, method, self, options.delete(:object)).to_datetime_field_tag(options)
