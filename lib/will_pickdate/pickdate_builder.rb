@@ -23,6 +23,6 @@ end
 
 class ActionView::Helpers::FormBuilder
   def datetime_field(method, options = {})
-    @template.datetime_select(@object_name, method, objectify_options(options))
+    @template.datetime_field(@object_name, method, objectify_options(options))
   end
 end
