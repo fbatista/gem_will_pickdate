@@ -5,8 +5,7 @@ module PickdateHelper
       InstanceTag.new(object_name, method, self, options.delete(:object)).to_datetime_field_tag(options)
   end
 
-  class InstanceTag
-    
+  module PickdateHelperInstanceTag
     def to_datetime_field_tag(options = {})
       options = options.stringify_keys
       options = DEFAULT_FIELD_OPTIONS.merge(options)
@@ -18,4 +17,14 @@ module PickdateHelper
       tag("input", options)
     end
   end
+
+  class InstanceTag
+    include PickdateHelperInstanceTag
+  end
+
+  class FormBuilder
+      def datetime_field(method, options = {})
+        @template.datetime_select(@object_name, method, objectify_options(options))
+      end
+    end
 end
