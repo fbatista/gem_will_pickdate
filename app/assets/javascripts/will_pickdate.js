@@ -93,6 +93,21 @@
 
     this.element.before(this.clone);
 
+    // hook original datetime input for change events, in hope of making it easy for developers to
+    // do something in lines of: 
+    // $('#event_starts_at').change(function(e){ $('#event_ends_at').val(this.value).change() })
+    // in order to control through outside behaviours the value and display value of the calendar widget
+    this.element.change($.proxy(function(e) {
+      this.clone.val(
+        this.format(
+          new Date(
+            this.unformat(
+              this.element.val(), 
+              this.options.inputOutputFormat)
+            ), 
+            this.options.format));
+    }, this));
+
     if(this.toggler) {
       this.toggler.css('cursor', 'pointer').click($.proxy(function(event) {
         this.onFocus(this.element, this.clone);
