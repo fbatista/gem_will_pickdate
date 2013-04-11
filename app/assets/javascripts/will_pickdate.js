@@ -492,8 +492,11 @@
       } else if (event.which == 40) {
         //down arrow
         dy = -1;
-      } else if (48 <= event.which <= 57) {
+      } else if (48 <= event.which && event.which <= 57) {
         event.target.value = (event.target.value + String.fromCharCode(event.which)).substr(1,2)
+      } else if (event.which == 9 ) {
+        //allow tab to skip to next
+        return;   
       }
       $.proxy(f, this)(event, null, null, dy);
     },
