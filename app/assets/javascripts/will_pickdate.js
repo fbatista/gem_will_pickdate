@@ -487,9 +487,13 @@
     keyWrapper: function(f, event) {
       dy = 0;
       if(event.which == 38) {
+        //up arrow
         dy = 1;
-      } else if (event.which = 40) {
+      } else if (event.which == 40) {
+        //down arrow
         dy = -1;
+      } else if (48 <= event.which <= 57) {
+        event.target.value = (event.target.value + String.fromCharCode(event.which)).substr(1,2)
       }
       $.proxy(f, this)(event, null, null, dy);
     },
