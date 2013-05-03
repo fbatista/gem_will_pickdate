@@ -493,7 +493,8 @@
         //down arrow
         dy = -1;
       } else if (48 <= event.which && event.which <= 57) {
-        event.target.value = (event.target.value + String.fromCharCode(event.which)).substr(1,2)
+        aux = event.target.value + String.fromCharCode(event.which)
+        event.target.value = (aux).substr(Math.max(aux.length - 2, 0),2)
       } else if (event.which == 9 || event.which == 46 || event.which == 8) {
         //allow tab to skip to next
         //allow delete and backspace to have normal behaviour
