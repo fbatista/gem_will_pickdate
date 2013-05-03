@@ -422,7 +422,7 @@
           v = (v < 23) ? v + 1 : 0;
         }
         else if(dy < 0) {
-          v = (v > 0) ? v - 1 : 23;
+          v = (v > 0) ? Math.min(v - 1, 23) : 23;
         }
       }
       else {
@@ -445,7 +445,7 @@
             ampm.val(ampm.val() == 'AM' ? 'PM' : 'AM');
           }
           else if(v > 1) {
-            v--;
+            v = Math.min(v - 1, 12);
           }
           else {
             v = 12;
@@ -494,8 +494,9 @@
         dy = -1;
       } else if (48 <= event.which && event.which <= 57) {
         event.target.value = (event.target.value + String.fromCharCode(event.which)).substr(1,2)
-      } else if (event.which == 9 ) {
+      } else if (event.which == 9 || event.which == 46 || event.which == 8) {
         //allow tab to skip to next
+        //allow delete and backspace to have normal behaviour
         return;   
       }
       $.proxy(f, this)(event, null, null, dy);
