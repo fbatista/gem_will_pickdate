@@ -181,6 +181,13 @@
 	font-size: 20px;
 }
 
+.wpd .time .helper {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	text-align: center;
+}
+
 .wpd .days .day {
 	float: left;
 	cursor: pointer;

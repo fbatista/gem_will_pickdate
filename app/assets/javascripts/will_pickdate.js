@@ -483,8 +483,8 @@
         i.val(i.val() == "AM" ? "PM" : "AM");
       }
     },
-
-    keyWrapper: function(f, event) {
+    
+    keyWrapper: function(f, ampm, event) {
       dy = 0;
       if(event.which == 38) {
         //up arrow
@@ -492,10 +492,14 @@
       } else if (event.which == 40) {
         //down arrow
         dy = -1;
-      } else if (48 <= event.which && event.which <= 57) {
-        aux = event.target.value + String.fromCharCode(event.which)
-        event.target.value = (aux).substr(Math.max(aux.length - 2, 0),2)
-      } else if (event.which == 9 || event.which == 46 || event.which == 8) {
+      } else if (!ampm && 48 <= event.which && event.which <= 57) {
+        aux = event.target.value + String.fromCharCode(event.which);
+        event.target.value = (aux).substr(Math.max(aux.length - 2, 0),2);
+      } else if (ampm && event.which == 65) {
+        event.target.value = 'AM';
+      } else if (ampm && event.which == 80) {
+        event.target.value = 'PM';
+      } else if (event.which == 9 || (!ampm && (event.which == 46 || event.which == 8))) {
         //allow tab to skip to next
         //allow delete and backspace to have normal behaviour
         return;   
@@ -521,12 +525,12 @@
                 this.working_date.getHours() :
                   (this.working_date.getHours() > 12 ? this.working_date.getHours() - 12 :
                     this.working_date.getHours())) + '"/>')
-        .on('keydown', $.proxy(this.keyWrapper, this, this.hourShifter))
+        .on('keydown', $.proxy(this.keyWrapper, this, this.hourShifter, false))
         .mousewheel($.proxy(this.hourShifter, this)));
 
       container.append($('<input type="text" class="minutes"' + (this.options.militaryTime ? ' style="left:110px"' : '') + ' maxlength="2" value="' +
               this.leadZero(this.working_date.getMinutes()) + '"/>')
-        .on('keydown', $.proxy(this.keyWrapper, this, this.minuteShifter))
+        .on('keydown', $.proxy(this.keyWrapper, this, this.minuteShifter, false))
         .mousewheel($.proxy(this.minuteShifter, this)));
 
       container.append($('<div class="separator"' + (this.options.militaryTime ? ' style="left:91px"' : '') + '>:</div>'));
@@ -534,7 +538,7 @@
       if(!this.options.militaryTime) {
         container.append($('<input type="text" class="ampm" maxlength="2" value="' +
           (this.working_date.getHours() >= 12 ? "PM" : "AM") + '"/>')
-          .on('keydown', $.proxy(this.keyWrapper, this, this.ampmShifter))
+          .on('keydown', $.proxy(this.keyWrapper, this, this.ampmShifter, true))
           .mousewheel($.proxy(this.ampmShifter)));
       }
 
@@ -552,6 +556,7 @@
             minutes: parseInt(this.picker.find('.minutes').val(), 10)
           }));
       }, this)));
+      container.append('<p class="helper"><small>Tip: you can also use &uarr;, &darr; and the mouse wheel to shift values</small></p>');
     },
 
     renderMonth: function() {
