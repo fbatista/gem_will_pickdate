@@ -33,7 +33,7 @@
       allowEmpty: false,
       inputOutputFormat: 'S', // default to unix timestamp
       animationDuration: 400,
-      useFadeInOut: !$.browser.msie, // dont animate fade-in/fade-out for IE
+      useFadeInOut: $.support.opacity, // dont animate fade-in/fade-out for IE
       startView: 'month', // allowed values: {time, month, year, decades}
       positionOffset: { x: 0, y: 0 },
       minDate: null, // { date: '[date-string]', format: '[date-string-interpretation-format]' }
