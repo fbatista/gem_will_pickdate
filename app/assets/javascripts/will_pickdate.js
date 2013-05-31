@@ -91,9 +91,9 @@
     this.display = this.element.css('display');
     this.clone = this.element
             .css('display', this.options.debug ? this.display : 'none')
-            .data('will_pickdate', true)
+            .data('will_pickdate', this)
             .clone(true)
-            .data('will_pickdate', true)
+            .data('will_pickdate', this)
             .removeAttr('name')
             .attr('id', this.element.attr('id') + '_display')
             .css('display', this.display)
