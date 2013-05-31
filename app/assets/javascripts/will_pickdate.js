@@ -26,6 +26,8 @@
                    // the right might have a different margin
       timePicker: true,
       timePickerOnly: false,
+      klass: Date,
+      timezone: null,
       yearPicker: true,
       militaryTime: false,
       yearsPerPage: 20,
@@ -49,7 +51,10 @@
     }, options);
 
     if(!this.options.initializeDate) {
-      this.options.initializeDate = new Date();
+      this.options.initializeDate = new this.options.klass();
+      if(this.options.timezone) {
+        this.options.initializeDate.setTimezone(this.options.timezone);
+      }
     }
 
     if(this.options.toggleElements != null && this.options.toggleElements.jquery) {
@@ -69,8 +74,11 @@
     }
 
     if(init_clone_val = this.element.val()) {
-      init_clone_val = this.format(new Date(this.unformat(init_clone_val, this.options.inputOutputFormat)),
-              this.options.format);
+      if(this.options.timezone) {
+        init_clone_val = this.format(new this.options.klass(this.unformat(init_clone_val, this.options.inputOutputFormat), this.options.timezone), this.options.format);
+      } else {
+        init_clone_val = this.format(new this.options.klass(this.unformat(init_clone_val, this.options.inputOutputFormat)), this.options.format);  
+      }
     }
     else if(!this.options.allowEmpty) {
       init_clone_val = this.format(this.options.initializeDate, this.options.format);
@@ -98,14 +106,32 @@
     // $('#event_starts_at').change(function(e){ $('#event_ends_at').val(this.value).change() })
     // in order to control through outside behaviours the value and display value of the calendar widget
     this.element.change($.proxy(function(e) {
-      this.clone.val(
-        this.format(
-          new Date(
-            this.unformat(
-              this.element.val(), 
-              this.options.inputOutputFormat)
-            ), 
-            this.options.format));
+      if(this.options.timezone){
+        this.clone.val(
+          this.format(
+            new this.options.klass(
+              this.unformat(
+                this.element.val(), 
+                this.options.inputOutputFormat
+              ),
+              this.options.timezone
+            ),
+            this.options.format
+          )
+        );
+      }else {
+        this.clone.val(
+          this.format(
+            new this.options.klass(
+              this.unformat(
+                this.element.val(), 
+                this.options.inputOutputFormat
+              )
+            ),
+            this.options.format
+          )
+        );
+      }
     }, this));
 
     if(this.toggler) {
@@ -149,10 +175,18 @@
       else {
         init_visual_date = this.options.initializeDate;
         if(this.options.maxDate && init_visual_date.valueOf() > this.options.maxDate.valueOf()) {
-          init_visual_date = new Date(this.options.maxDate.valueOf());
+          if(this.options.timezone) {
+            init_visual_date = new this.options.klass(this.options.maxDate.valueOf(), this.options.timezone);
+          } else {
+            init_visual_date = new this.options.klass(this.options.maxDate.valueOf());
+          }
         }
         if(this.options.minDate && init_visual_date.valueOf() < this.options.minDate.valueOf()) {
-          init_visual_date = new Date(this.options.minDate.valueOf());
+          if(this.options.timezone) {
+            init_visual_date = new this.options.klass(this.options.minDate.valueOf(), this.options.timezone);
+          } else {
+            init_visual_date = new this.options.klass(this.options.minDate.valueOf());
+          }
         }
       }
 
@@ -223,7 +257,11 @@
     show: function(timestamp) {
       this.formatMinMaxDates();
       if(timestamp) {
-        this.working_date = new Date(timestamp);
+        if(this.options.timezone) {
+          this.working_date = new this.options.klass(timestamp, this.options.timezone);
+        } else {
+          this.working_date = new this.options.klass(timestamp);
+        }
       }
       else {
         this.working_date = this.options.initializeDate;
@@ -251,7 +289,13 @@
         this.newContents.empty();
       }
 
-      var startDate = new Date(this.working_date.getTime());
+      var startDate;
+      if(this.options.timezone) {
+        startDate = new this.options.klass(this.working_date.getTime(), this.options.timezone);
+      } else {
+        startDate = new this.options.klass(this.working_date.getTime());
+      }
+      
       this.limit = { right: false, left: false };
 
       switch(this.mode) {
@@ -846,8 +890,19 @@
           case 'h': if (a['a'] == 'pm' || a['A'] == 'PM') { d.setHours(v == 12 ? 0 : parseInt(v, 10) + 12); } else { d.setHours(v); } break;
           case 'i': d.setMinutes(v); break;
           case 's': d.setSeconds(v); break;
-          case 'U': d = new Date(parseInt(v, 10) * 1000); break;
-          case 'S': d = new Date(v);
+          case 'U': 
+            if (this.options.timezone) {
+              d = new this.options.klass(parseInt(v, 10) * 1000, this.options.timezone); 
+            } else {
+              d = new this.options.klass(parseInt(v, 10) * 1000);   
+            }
+            break;
+          case 'S': 
+            if (this.options.timezone) {
+              d = new this.options.klass(v, this.options.timezone);
+            } else {
+              d = new this.options.klass(v);  
+            }
         }
       }
 
